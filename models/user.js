@@ -14,11 +14,13 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.createUser = function(body) {
-    var user = User.create({
-      email: body.email,
-      password: bcrypt.hashSync(body.password, saltRounds),
-      api_key: randomstring.generate()
-    })
+    if (body.password === body.password_confirmation) {
+      var user = User.create({
+        email: body.email,
+        password: bcrypt.hashSync(body.password, saltRounds),
+        api_key: randomstring.generate()
+      })
+    };
     return user
   };
 
