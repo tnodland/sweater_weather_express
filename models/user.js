@@ -1,4 +1,8 @@
 'use strict';
+var randomstring = require("randomstring");
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
+
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
     email: DataTypes.STRING,
@@ -8,5 +12,15 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
   };
+
+  User.createUser = function(body) {
+    var user = User.create({
+      email: body.email,
+      password: bcrypt.hashSync(body.password, saltRounds),
+      api_key: randomstring.generate()
+    })
+    return user
+  };
+
   return User;
 };
