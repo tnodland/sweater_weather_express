@@ -24,5 +24,26 @@ module.exports = (sequelize, DataTypes) => {
     return user
   };
 
+  User.validateLogin = function(body) {
+  return new Promise(function (resolve, reject){
+    User.findOne({
+      where: {
+        email: body.email
+      }
+    })
+    .then(user => {
+      if (bcrypt.compareSync(body.password, user.password)) {
+        resolve(user);
+      }
+      else {
+        reject(error);
+      }
+    })
+    .catch(error => {
+      reject(error);
+    });
+  })
+
+
   return User;
 };
